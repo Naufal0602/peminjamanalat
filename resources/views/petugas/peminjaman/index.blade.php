@@ -20,7 +20,7 @@
         <table class="w-full border text-sm">
             <thead class="bg-gray-100">
                 <tr>
-                    <th class="border px-3 py-2">Noo</th>
+                    <th class="border px-3 py-2">No</th>
                     <th class="border px-3 py-2">Peminjam</th>
                     <th class="border px-3 py-2">Tanggal Pinjam</th>
                     <th class="border px-3 py-2">Detail Alat</th>

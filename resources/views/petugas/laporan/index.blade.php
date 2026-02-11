@@ -7,20 +7,33 @@
 
 <div class="bg-white rounded-xl shadow p-6 mb-6">
 
-    <form method="GET" class="flex gap-4 mb-4">
+   <form method="GET" class="flex gap-4 mb-4">
         <input type="date" name="tanggal_awal" class="border p-2 rounded"
-               value="{{ request('tanggal_awal') }}">
+            value="{{ request('tanggal_awal') }}">
+
         <input type="date" name="tanggal_akhir" class="border p-2 rounded"
-               value="{{ request('tanggal_akhir') }}">
+            value="{{ request('tanggal_akhir') }}">
+
+        <select name="status" class="border p-2 rounded">
+            <option value="">-- Semua Status --</option>
+            <option value="dipinjam" {{ request('status') == 'dipinjam' ? 'selected' : '' }}>
+                Sedang Dipinjam
+            </option>
+            <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>
+                Selesai
+            </option>
+        </select>
+
         <button class="bg-blue-600 text-white px-4 py-2 rounded">
             Filter
         </button>
-        <a href="{{ route('petugas.laporan.printPdf', request()->query()) }}"
-   class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded mb-4 inline-block">
-   Print PDF
-</a>
 
+        <a href="{{ route('petugas.laporan.printPdf', request()->query()) }}"
+        class="bg-red-600 text-white px-4 py-2 rounded inline-block">
+            Print PDF
+        </a>
     </form>
+
 
     <table id="datatable" class="w-full border text-sm">
         <thead class="bg-gray-100">
@@ -41,12 +54,22 @@
                 <td>{{ $item->peminjam->name }}</td>
                 <td class="text-center">{{ $item->tanggal_pinjam }}</td>
                 <td class="text-center">
-                    {{ optional($item->pengembalian)->tanggal_kembali ?? '-' }}
+                    @if ($item->pengembalian)
+                        {{ $item->pengembalian->tanggal_kembali }}
+                    @else
+                    {{ $item->tanggal_kembali_rencana }}
+                    @endif
                 </td>
                 <td class="text-center">
-                    <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">
-                        Selesai
-                    </span>
+                    @if ($item->status === 'dipinjam')
+                        <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs">
+                            Sedang Dipinjam
+                        </span>
+                    @else
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs">
+                            Selesai
+                        </span>
+                    @endif
                 </td>
                 <td class="text-right">
                     Rp {{ number_format(optional($item->pengembalian)->total_denda ?? 0) }}

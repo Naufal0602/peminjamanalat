@@ -4,7 +4,7 @@
 @section('header', 'Tambah Alat')
 
 @section('content')
-<div class="bg-white p-6 rounded shadow max-w-xl">
+<div class="bg-white p-6 rounded justify-center shadow max-w-2xl">
 
     <form action="{{ route('admin.alat.store') }}" 
           method="POST" 

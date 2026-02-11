@@ -35,9 +35,21 @@
             </li>
 
               <li>
-                <a href="{{ route('admin.kategori.index') }}"
+                <a href="{{ route('admin.log_aktivitas.index') }}"
                    class="flex items-center p-3 rounded-lg hover:bg-gray-800">
                     <i class="fas fa-toolbox mr-3"></i> log aktivitas
+                </a>
+            </li>
+              <li>
+                <a href="{{ route('profile.edit') }}"
+                   class="flex items-center p-3 rounded-lg hover:bg-gray-800">
+                    <i class="fas fa-toolbox mr-3"></i> Profil
+                </a>
+            </li>
+              <li>
+                <a href="{{ route('admin.peminjaman.index') }}"
+                   class="flex items-center p-3 rounded-lg hover:bg-gray-800">
+                    <i class="fas fa-toolbox mr-3"></i> Peminjaman
                 </a>
             </li>
         </ul>

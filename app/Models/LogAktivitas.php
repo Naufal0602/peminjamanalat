@@ -11,7 +11,7 @@ class LogAktivitas extends Model
 
     protected $table = 'log_aktivitas';
     protected $primaryKey = 'id_log';
-    public $timestamps = false; // karena kita pakai kolom waktu manual
+    public $timestamps = false; 
 
     protected $fillable = [
         'id_user',

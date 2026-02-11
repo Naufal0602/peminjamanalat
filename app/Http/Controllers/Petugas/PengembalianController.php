@@ -13,6 +13,8 @@ use App\Models\Alat;
 use App\Mail\PeringatanPengembalianMail;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use App\Helpers\LogHelper;
+
 
 class PengembalianController extends Controller
 {
@@ -20,7 +22,7 @@ class PengembalianController extends Controller
     public function index()
     {
         $peminjaman = Peminjaman::with('peminjam')
-            ->where('status', 'disetujui')
+            ->where('status', 'dipinjam')
             ->get();
 
         return view('petugas.pengembalian.index', compact('peminjaman'));
@@ -95,6 +97,13 @@ class PengembalianController extends Controller
 
             // UPDATE STATUS PEMINJAMAN
             $peminjaman->update(['status' => 'selesai']);
+
+            // LOG AKTIVITAS
+            $aktivitas = "Memproses pengembalian untuk peminjaman ID: {$peminjaman->id_peminjaman}. "
+                . "Denda keterlambatan: Rp {$dendaTelat}, "
+                . "Denda kerusakan: Rp {$totalDendaKerusakan}, "
+                . "Total denda: Rp {$totalDenda}.";
+            LogHelper::simpan($aktivitas);
         });
 
         return redirect()->route('petugas.pengembalian.index')

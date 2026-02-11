@@ -4,7 +4,7 @@
 @section('header', 'Edit Alat')
 
 @section('content')
-<div class="bg-white p-6 rounded shadow max-w-xl">
+<div class="bg-white justify-center w-full p-6 rounded shadow max-w-2xl">
 
     <form action="{{ route('admin.alat.update', $alat->id_alat) }}"
           method="POST"

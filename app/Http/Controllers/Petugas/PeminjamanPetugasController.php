@@ -8,6 +8,7 @@ use App\Models\Peminjaman;
 use App\Models\Alat;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\LogHelper;
 
 class PeminjamanPetugasController extends Controller
 {
@@ -101,6 +102,10 @@ class PeminjamanPetugasController extends Controller
 
             $alat->decrement('stok', $detail->jumlah);
         }
+
+         LogHelper::simpan(
+            'Menyetujui peminjaman ID #' . $peminjaman->id_peminjaman
+        );
     });
 
     return back()->with('success', 'Peminjaman berhasil disetujui');
@@ -116,6 +121,10 @@ class PeminjamanPetugasController extends Controller
             'id_petugas' => Auth::id()
         ]);
 
+            LogHelper::simpan(
+                'Menolak peminjaman ID #' . $peminjaman->id_peminjaman
+            );
+
         return back()->with('success', 'Peminjaman ditolak');
     }
 
@@ -130,6 +139,10 @@ class PeminjamanPetugasController extends Controller
         $peminjaman->update([
             'status' => 'dipinjam'
         ]);
+
+        LogHelper::simpan(
+        'Menyerahkan alat untuk peminjaman ID #' . $peminjaman->id_peminjaman
+    );
 
         return back()->with('success', 'Status berubah menjadi sedang dipinjam');
     }

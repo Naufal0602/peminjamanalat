@@ -26,6 +26,12 @@
                     <i class="fas fa-toolbox mr-3"></i> Pengembalian
                 </a>
             </li>
+             <li>
+                <a href="{{ route('profile.edit') }}"
+                   class="flex items-center p-3 rounded-lg hover:bg-gray-800">
+                    <i class="fas fa-toolbox mr-3"></i> Profil
+                </a>
+            </li>
         </ul>
     </nav>
 

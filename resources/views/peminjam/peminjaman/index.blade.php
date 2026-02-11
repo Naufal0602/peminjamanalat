@@ -92,7 +92,8 @@
 
     @endif
 </div>
-
+@endsection
+@push('scripts')
 <script>
 $(document).ready(function () {
     $('#peminjamanTable').DataTable({
@@ -112,6 +113,4 @@ $(document).ready(function () {
     });
 });
 </script>
-
-
-@endsection
+@endpush

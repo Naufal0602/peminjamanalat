@@ -83,6 +83,12 @@
             <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
                 Ajukan Peminjaman
             </button>
+            <button>
+                <a href="{{ route('peminjam.peminjaman.index') }}"
+                   class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded ms-3">
+                    Batal
+                </a>
+            </button>
         </div>
     </form>
 </div>

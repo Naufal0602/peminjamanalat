@@ -2,17 +2,23 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\AlatController;
 use App\Http\Controllers\Admin\KategoriController;
 use App\Http\Controllers\Admin\PenggunaController;
+use App\Http\Controllers\Admin\LogAktivitasController;  
+use App\Http\Controllers\Admin\PeminjamanAdminController;
 
+
+use App\Http\Controllers\Petugas\DashboardController;
 use App\Http\Controllers\Petugas\PeminjamanPetugasController;
+use App\Http\Controllers\Petugas\PengembalianController;
 use App\Http\Controllers\Petugas\LaporanController;
 
+use App\Http\Controllers\Peminjam\DashboardPeminjamController;
 use App\Http\Controllers\Peminjam\PeminjamanController;
 use App\Http\Controllers\Peminjam\PengembalianUserController;
-
-use App\Http\Controllers\Petugas\PengembalianController;
 
 
 Route::get('/', function () {
@@ -21,7 +27,7 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', function () {return view('admin.dashboard'); })->name('admin.dashboard');
+    Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('admin.dashboard');
 
     Route::get('/alat', [AlatController::class, 'index'])->name('admin.alat.index');
     Route::get('/alat/create', [AlatController::class, 'create'])->name('admin.alat.create');
@@ -41,10 +47,19 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/pengguna/create', [PenggunaController::class, 'create'])->name('admin.pengguna.create');
     Route::post('/pengguna', [PenggunaController::class, 'store'])->name('admin.pengguna.store');
     Route::delete('/pengguna/{id}', [PenggunaController::class, 'destroy'])->name('admin.pengguna.destroy');
+
+    Route::get('/log-aktivitas', [LogAktivitasController::class, 'index'])->name('admin.log_aktivitas.index');
+
+    Route::get('/peminjaman', [PeminjamanAdminController::class, 'index'])->name('admin.peminjaman.index');
+    Route::get('/peminjaman/create', [PeminjamanAdminController::class, 'create'])->name('admin.peminjaman.create');
+    Route::post('/peminjaman', [PeminjamanAdminController::class, 'store'])->name('admin.peminjaman.store');
+    Route::get('/peminjaman/{id}/edit', [PeminjamanAdminController::class, 'edit'])->name('admin.peminjaman.edit');
+    Route::put('/peminjaman/{id}', [PeminjamanAdminController::class, 'update'])->name('admin.peminjaman.update');
+    Route::delete('/peminjaman/{id}', [PeminjamanAdminController::class, 'destroy'])->name('admin.peminjaman.destroy');
     });
 
 Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->group(function () {
-    Route::get('/dashboard', function () { return view('petugas.dashboard');})->name('petugas.dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('petugas.dashboard');
 
     Route::get('/peminjaman', [PeminjamanPetugasController::class, 'index'])->name('petugas.peminjaman.index');
     Route::post('peminjaman/{id}/setujui', [PeminjamanPetugasController::class, 'setujui'])->name('petugas.peminjaman.setujui');
@@ -62,7 +77,7 @@ Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->group(function (
 });
 
 Route::middleware(['auth', 'role:peminjam'])->prefix('peminjam')->group(function () {
-    Route::get('/dashboard', function () {return view('peminjam.dashboard');})->name('peminjam.dashboard');
+    Route::get('/dashboard', [DashboardPeminjamController::class, 'index'])->name('peminjam.dashboard');
     Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjam.peminjaman.index');
     Route::get('/peminjaman/create', [PeminjamanController::class, 'create'])->name('peminjam.peminjaman.create');
     Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjam.peminjaman.store');

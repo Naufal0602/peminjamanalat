@@ -13,7 +13,7 @@
         </a>
     </div>
 
-    <table class="w-full border">
+    <table id="userTable" class="w-full border">
         <thead class="bg-gray-100">
             <tr>
                 <th class="border px-3 py-2">No</th>
@@ -49,6 +49,29 @@
             @endforeach
         </tbody>
     </table>
-
 </div>
 @endsection
+@push('scripts')
+<script>
+$(document).ready(function () {
+    $('#userTable').DataTable({
+        language: {
+            search: "",
+            searchPlaceholder: "Cari pengguna...",
+            lengthMenu: "_MENU_ data per halaman",
+            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+            paginate: {
+                next: '→',
+                previous: '←'
+            }
+        },
+        pageLength: 10,
+        order: [[0, 'asc']], // JANGAN kolom aksi
+        columnDefs: [
+            { targets: 0, className: 'text-center' }
+        ]
+    });
+});
+</script>
+@endpush
+
