@@ -32,9 +32,17 @@
                     {{ $item->tanggal_pinjam }}
                 </td>
 
-                <td class="text-center">
-                    {{ optional($item->pengembalian)->tanggal_kembali ?? '-' }}
-                </td>
+            <td class="text-center">
+                @if (!is_null($item->pengembalian))
+                    {{ $item->pengembalian->tanggal_kembali ?? '-' }}
+                @elseif (!is_null($item->tanggal_kembali_rencana))
+                    {{ $item->tanggal_kembali_rencana }}
+                @else
+                    -
+                @endif
+            </td>
+
+
 
                 <td class="text-center">
                     @if ($item->status === 'selesai')
@@ -47,7 +55,7 @@
                         </span>
                     @else
                         <span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs">
-                            Menunggu
+                            Menunggu persetujuan
                         </span>
                     @endif
                 </td>

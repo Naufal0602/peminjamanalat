@@ -13,6 +13,7 @@ class PengembalianUserController extends Controller
         $pengembalian = Peminjaman::with(['pengembalian'])
             ->where('id_peminjam', Auth::id())
             ->orderBy('tanggal_pinjam', 'desc')
+            ->orderBy('tanggal_kembali_rencana', 'desc')
             ->get();
 
         return view(

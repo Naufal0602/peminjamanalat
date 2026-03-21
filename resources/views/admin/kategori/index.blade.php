@@ -38,12 +38,12 @@
                             Edit
                         </a>
 
-                        <form action="{{ route('admin.kategori.destroy', $item->id_kategori) }}"
-                              method="POST"
-                              onsubmit="return confirm('Hapus kategori ini?')">
+                       <form action="{{ route('admin.kategori.destroy', $item->id_kategori) }}"
+                            method="POST"
+                            class="delete-form">
                             @csrf
                             @method('DELETE')
-                            <button
+                            <button type="submit"
                                 class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs">
                                 Hapus
                             </button>
@@ -74,6 +74,39 @@ $(document).ready(function () {
             }
         }
     });
+});
+
+     $('.delete-form').submit(function(e) {
+    e.preventDefault();
+
+    let form = this;
+
+    Swal.fire({
+        title: "Apa kamu yakin?",
+        text: "kamu ingin menghapus data ini!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "oke, hapus!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            Swal.fire({
+                title: "Deleted!",
+                text: "Data kategori telah dihapus.",
+                icon: "success",
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+            setTimeout(function(){
+                form.submit();
+            }, 1500);
+
+        }
+    });
+
 });
 </script>
 @endpush

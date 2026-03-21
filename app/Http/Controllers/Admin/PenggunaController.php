@@ -8,10 +8,11 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PetugasRegisteredMail;
+use App\Mail\PetugasDeletedMail;
 
 class PenggunaController extends Controller
 {
-   public function index()
+    public function index()
     {
         $users = User::whereIn('role', ['petugas', 'peminjam'])->get();
         return view('admin.pengguna.index', compact('users'));
@@ -25,26 +26,26 @@ class PenggunaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-        'name' => 'required',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|min:6'
-    ]);
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6'
+        ]);
 
-    $plainPassword = $request->password;
+        $plainPassword = $request->password;
 
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($plainPassword),
-        'role' => 'petugas'
-    ]);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($plainPassword),
+            'role' => 'petugas'
+        ]);
 
-    // KIRIM EMAIL
-    Mail::to($user->email)
-        ->send(new PetugasRegisteredMail($user, $plainPassword));
+        // KIRIM EMAIL
+        Mail::to($user->email)
+            ->send(new PetugasRegisteredMail($user, $plainPassword));
 
-    return redirect()->route('admin.pengguna.index')
-        ->with('success', 'Petugas berhasil ditambahkan & email terkirim');
+        return redirect()->route('admin.pengguna.index')
+            ->with('success', 'Petugas berhasil ditambahkan & email terkirim');
     }
 
     /**
@@ -76,6 +77,15 @@ class PenggunaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        // kirim email SEBELUM dihapus
+        Mail::to($user->email)
+            ->send(new PetugasDeletedMail($user));
+
+        $user->delete();
+
+        return redirect()->route('admin.pengguna.index')
+            ->with('success', 'User berhasil dihapus & email terkirim');
     }
 }

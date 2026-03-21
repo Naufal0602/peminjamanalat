@@ -15,40 +15,45 @@ class DashboardAdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-public function index()
+    public function index()
     {
         // Ambil data statistik dari database
         $totalPengguna = User::count();
         $totalAlat = Alat::count();
         $totalPeminjamanAktif = Peminjaman::where('status', 'aktif')->count();
         $totalKategori = Kategori::count();
-        
+
         // Data peminjaman yang akan berakhir hari ini
         $peminjamanBerakhirHariIni = Peminjaman::whereDate('tanggal_kembali_rencana', now()->toDateString())
             ->where('status', 'aktif')
             ->count();
-            
+
         // Data pertumbuhan bulanan (contoh sederhana)
         $pertumbuhanPengguna = $this->hitungPertumbuhanBulanan(User::class);
         $pertumbuhanAlat = $this->hitungPertumbuhanBulanan(Alat::class);
-        
+
         // Peminjaman terbaru
-       $peminjamanTerbaru = Peminjaman::with([
+        $peminjamanTerbaru = Peminjaman::with([
             'peminjam',
             'petugas',
             'detailPeminjaman.alat'
         ])
-        ->orderBy('created_at', 'desc')
-        ->take(5)
-        ->get();
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
 
-            
+        $statusCounts = [
+            'menunggu' => \App\Models\Peminjaman::where('status', 'menunggu')->count(),
+            'dipinjam' => \App\Models\Peminjaman::where('status', 'dipinjam')->count(),
+            'selesai' => \App\Models\Peminjaman::where('status', 'selesai')->count(),
+            'ditolak' => \App\Models\Peminjaman::where('status', 'ditolak')->count(),
+        ];
         // Aktivitas terbaru dari log
         $aktivitasTerbaru = LogAktivitas::with('user')
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();
-            
+
         // Kategori baru bulan ini
         $kategoriBaruBulanIni = Kategori::whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
@@ -64,7 +69,8 @@ public function index()
             'pertumbuhanAlat',
             'peminjamanTerbaru',
             'aktivitasTerbaru',
-            'kategoriBaruBulanIni'
+            'kategoriBaruBulanIni',
+            'statusCounts'
         ));
     }
 
@@ -76,15 +82,15 @@ public function index()
         $bulanIni = $model::whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->count();
-            
+
         $bulanLalu = $model::whereMonth('created_at', now()->subMonth()->month)
             ->whereYear('created_at', now()->subMonth()->year)
             ->count();
-            
+
         if ($bulanLalu == 0) {
             return $bulanIni > 0 ? 100 : 0;
         }
-        
+
         return round((($bulanIni - $bulanLalu) / $bulanLalu) * 100);
     }
 

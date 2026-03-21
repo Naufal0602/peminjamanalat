@@ -74,7 +74,7 @@ class DashboardPeminjamController extends Controller
         $alatPopuler = Alat::select('alat.id_alat', 'alat.nama_alat')
             ->join('detail_peminjaman', 'alat.id_alat', '=', 'detail_peminjaman.id_alat')
             ->join('peminjaman', 'detail_peminjaman.id_peminjaman', '=', 'peminjaman.id_peminjaman')
-            ->where('peminjaman.status', 'dikembalikan')
+            ->where('peminjaman.status', 'selesai')
             ->selectRaw('COUNT(*) as total_peminjaman')
             ->groupBy('alat.id_alat', 'alat.nama_alat')
             ->orderBy('total_peminjaman', 'desc')

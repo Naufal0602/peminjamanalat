@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>@yield('title', 'petugas Dashboard')</title>
@@ -10,25 +11,29 @@
 
 <body class="bg-gray-100">
 
-<div class="flex h-screen">
+    <div class="flex h-screen">
 
-    {{-- SIDEBAR --}}
-    <x-peminjam.sidebar />
+        {{-- SIDEBAR --}}
+        <x-peminjam.sidebar />
 
-    <div class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 flex flex-col overflow-hidden">
 
-        {{-- NAVBAR --}}
-        <x-peminjam.navbar />
+            {{-- NAVBAR --}}
+            <x-peminjam.navbar />
 
-        {{-- CONTENT --}}
-        <main class="flex-1 overflow-y-auto p-6">
-            @yield('content')
-        </main>
+            {{-- CONTENT --}}
+            <main class="flex-1 overflow-y-auto p-6">
+                @yield('content')
+            </main>
 
+        </div>
     </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
-@stack('scripts')
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    @stack('scripts')
 </body>
+
 </html>

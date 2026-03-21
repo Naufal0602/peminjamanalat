@@ -15,7 +15,7 @@ class DashboardController extends Controller
         $today = Carbon::today();
 
         // Statistik
-        $totalPengguna = User::count();
+        $totalPengguna = User::where('role', 'peminjam')->count();
         $totalAlat = Alat::count();
 
         // Peminjaman hari ini
@@ -31,11 +31,16 @@ class DashboardController extends Controller
             })
             ->get();
 
+        $totalDendaHariIni = $pengembalianHariIni->sum(function ($item) {
+            return $item->pengembalian->total_denda ?? 0;
+        });
+
         return view('petugas.dashboard', compact(
             'totalPengguna',
             'totalAlat',
             'peminjamanHariIni',
-            'pengembalianHariIni'
+            'pengembalianHariIni',
+            'totalDendaHariIni',
         ));
     }
 }
